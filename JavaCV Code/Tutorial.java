@@ -51,6 +51,17 @@ public class Tutorial {
 					opencv_imgproc.circle(output, new Point((int) pointScalar.get(0), (int) pointScalar.get(1)), 5, Scalar.RED);
 					//draws contour
 					opencv_imgproc.drawContours(output, contours, (int) i, Scalar.BLUE);
+					/*Change specific pixels of (output) image
+					int x = (int) pointScalar.get(0);
+					int y = (int) pointScalar.get(1);
+					CvScalar pixelScalar = opencv_core.cvGet2D(output, y, x);//reversed because that's how arrays work
+					int r = 0, g = 0, b = 0;
+					//BGR
+					pixelScalar.setVal(0, b);
+					pixelScalar.setVal(1, g);
+					pixelScalar.setVal(2, r);
+					opencv_core.cvSet2D(output, y, x, pixelScalar);
+					*/
 				}
 			}
 		}
