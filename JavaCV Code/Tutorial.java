@@ -13,6 +13,7 @@ public class Tutorial {
 		
 		//the image that is returned
 		Mat output = src.clone();
+		//IplImage out = new IplImage(output);//uncomment this to access specific points
 		
 		//creates empty image to hold the gray scaled image
 		Mat gray = new Mat(src.size());
@@ -40,6 +41,9 @@ public class Tutorial {
 			//triangle
 			if (approx.rows() == 3 && approx.cols() == 1) {
 				
+				//draws contour
+				opencv_imgproc.drawContours(output, contours, (int) i, Scalar.BLUE);
+				
 				//makes image compatible for "point getting"
 				IplImage approxImg = new IplImage(approx);
 					
@@ -49,18 +53,20 @@ public class Tutorial {
 					CvScalar pointScalar = opencv_core.cvGet2D(approxImg, r, 0);
 					//draws point
 					opencv_imgproc.circle(output, new Point((int) pointScalar.get(0), (int) pointScalar.get(1)), 5, Scalar.RED);
-					//draws contour
-					opencv_imgproc.drawContours(output, contours, (int) i, Scalar.BLUE);
-					/*Change specific pixels of (output) image
+
+					//Change specific pixels of (output) image
+					//uncomment IplImage out (top of the method)
+					//due to both images being the "same" pointer, modifying the IplImage, also modifies the Mat
+					/*
 					int x = (int) pointScalar.get(0);
 					int y = (int) pointScalar.get(1);
-					CvScalar pixelScalar = opencv_core.cvGet2D(output, y, x);//reversed because that's how arrays work
-					int r = 0, g = 0, b = 0;
+					CvScalar pixelScalar = opencv_core.cvGet2D(out, y, x);//reversed because that's how arrays work
+					int red = 0, g = 255, b = 0;
 					//BGR
 					pixelScalar.setVal(0, b);
 					pixelScalar.setVal(1, g);
-					pixelScalar.setVal(2, r);
-					opencv_core.cvSet2D(output, y, x, pixelScalar);
+					pixelScalar.setVal(2, red);
+					opencv_core.cvSet2D(out, y, x, pixelScalar);
 					*/
 				}
 			}
