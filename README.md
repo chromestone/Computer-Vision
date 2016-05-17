@@ -1,2 +1,2 @@
 # Computer Vision
-My experimentations with computer visions (more coming soon!)
+My experimentations with computer vision (more coming soon!)
