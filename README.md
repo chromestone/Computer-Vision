@@ -1,2 +1,2 @@
-# Side-Projects
-My coding side projects from 2016 and beyond.
+# Computer Vision
+My experimentations with computer visions (more coming soon!)
