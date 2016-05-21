@@ -1,6 +1,11 @@
 import org.bytedeco.javacpp.opencv_core.*;
 import org.bytedeco.javacpp.*;
 
+/**
+ * 
+ * @author Derek Zhang
+ *
+ */
 public class Tutorial {
 
 	public static void main(String[] args) {
