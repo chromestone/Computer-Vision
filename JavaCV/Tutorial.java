@@ -1,3 +1,5 @@
+import java.nio.*;
+
 import org.bytedeco.javacpp.opencv_core.*;
 import org.bytedeco.javacpp.*;
 
@@ -11,7 +13,9 @@ public class Tutorial {
 	public static void main(String[] args) {
 		
 		//writes the output of the method
-		opencv_imgcodecs.imwrite("t1.jpg", detectTriangleAndDrawPoints(opencv_imgcodecs.imread("triangle.jpg")));
+		Mat mat = opencv_imgcodecs.imread("triangle.jpg");
+		
+		opencv_imgcodecs.imwrite("t4.jpg", detectTriangleAndDrawPoints(mat));
 	}
 	
 	public static Mat detectTriangleAndDrawPoints(Mat src) {
@@ -27,6 +31,7 @@ public class Tutorial {
 		//creates empty image to hold the thresholded image
 		Mat thresh = new Mat(gray.size());
 		opencv_imgproc.threshold(gray, thresh, 127, 255, opencv_imgproc.THRESH_BINARY_INV);
+		//opencv_imgproc.Canny(gray, gray, 200, 600);
 		
 		//stores the contours (outline of the shape)
 		MatVector contours = new MatVector();
@@ -49,20 +54,34 @@ public class Tutorial {
 				//draws contour
 				opencv_imgproc.drawContours(output, contours, (int) i, Scalar.BLUE);
 				
+				java.nio.Buffer buffer = approx.createBuffer();
+				if (buffer instanceof IntBuffer) {
+					
+					Point[] coordinates = getFirstThreeCoordinates((IntBuffer) buffer);
+					for (Point coordinate : coordinates) {
+						
+						opencv_imgproc.circle(output, coordinate, 5, Scalar.RED);
+					}
+				}
+				
+				
+				/*NOTE: NOT THE BEST METHOD
 				//makes image compatible for "point getting"
 				IplImage approxImg = new IplImage(approx);
-					
+				
 				for (int r = 0; r < approx.rows(); r++) {
 
 					//contains the points of the polygon
 					CvScalar pointScalar = opencv_core.cvGet2D(approxImg, r, 0);
+					System.out.println(pointScalar.get(0) + " " + pointScalar.get(1));
+
 					//draws point
 					opencv_imgproc.circle(output, new Point((int) pointScalar.get(0), (int) pointScalar.get(1)), 5, Scalar.RED);
 
 					//Change specific pixels of (output) image
 					//uncomment IplImage out (top of the method)
 					//due to both images being the "same" pointer, modifying the IplImage, also modifies the Mat
-					/*
+
 					int x = (int) pointScalar.get(0);
 					int y = (int) pointScalar.get(1);
 					CvScalar pixelScalar = opencv_core.cvGet2D(out, y, x);//reversed because that's how arrays work
@@ -72,11 +91,25 @@ public class Tutorial {
 					pixelScalar.setVal(1, g);
 					pixelScalar.setVal(2, red);
 					opencv_core.cvSet2D(out, y, x, pixelScalar);
-					*/
 				}
+				*/
 			}
 		}
 		
 		return output;
+	}
+	
+	
+	public static Point[] getFirstThreeCoordinates(IntBuffer buffer) {
+		
+		Point[] coordinates = new Point[3];
+		
+		for (int i = 0; i < 3 && buffer.limit() - buffer.position() >= 2; i++) {
+			
+			coordinates[i] = new Point(buffer.get(buffer.position()), buffer.get(buffer.position() + 1));
+			buffer.position(buffer.position() + 2);
+		}
+		
+		return coordinates;
 	}
 }
