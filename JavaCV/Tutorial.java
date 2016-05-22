@@ -106,8 +106,7 @@ public class Tutorial {
 		
 		for (int i = 0; i < 3 && buffer.limit() - buffer.position() >= 2; i++) {
 			
-			coordinates[i] = new Point(buffer.get(buffer.position()), buffer.get(buffer.position() + 1));
-			buffer.position(buffer.position() + 2);
+			coordinates[i] = new Point(buffer.get(), buffer.get());
 		}
 		
 		return coordinates;
