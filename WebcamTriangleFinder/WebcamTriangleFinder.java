@@ -15,10 +15,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 
-//import org.bytedeco.javacpp.BytePointer;
-//import org.bytedeco.javacpp.opencv_core;
-//import org.bytedeco.javacpp.opencv_core.CvScalar;
-//import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.MatVector;
 import org.bytedeco.javacpp.opencv_imgproc;
@@ -222,35 +218,6 @@ public class WebcamTriangleFinder extends Thread {
 							continue;
 						}
 						
-//						Mat innerApprox = null;
-//						boolean found = false;
-//						for (int k = 0; k < 3; k++) {//hardcoded BAD change soon
-//							
-//							int index = (int) children.get(k);
-//							System.out.println(index);
-//							
-//							if (index < 0)
-//								
-//								continue;
-//							
-//							innerApprox = new Mat();
-//							opencv_imgproc.approxPolyDP(contours.get(index), innerApprox, opencv_imgproc.arcLength(contours.get(index), true) * .01, true);
-//							
-//							if (Math.abs(opencv_imgproc.contourArea(contours.get(i))) < 1000 || !opencv_imgproc.isContourConvex(innerApprox))//15426
-//								
-//								continue;
-//
-//							if (innerApprox.rows() == 3 && innerApprox.cols() >= 1) {
-//								
-//								found = true;System.out.println(index);
-//								break;
-//							}
-//						}System.out.println(children.get(3));System.out.println(i + ":P");
-//						
-//						if (!found)
-//							
-//							continue;
-						
 						java.nio.Buffer buffer = innerApprox.createBuffer();
 						
 						if (!(buffer instanceof IntBuffer))
@@ -258,15 +225,6 @@ public class WebcamTriangleFinder extends Thread {
 							continue;
 
 						Point[] points = getReversedPoints((IntBuffer) buffer);//new Point[innerApprox.rows()];
-						/*
-						IplImage approxImg = new IplImage(innerApprox);
-							
-						for (int r = 0; r < points.length; r++) {
-
-							CvScalar pointScalar = opencv_core.cvGet2D(approxImg, r, 0);
-							points[r] = new Point((int) pointScalar.get(1), (int) pointScalar.get(0));//arrays in java have rotated axis by -90 deg
-						}
-						*/
 
 						double[] distances = new double[innerApprox.rows()];//distances squared that correspond to points of triangle
 						
@@ -288,14 +246,6 @@ public class WebcamTriangleFinder extends Thread {
 								index = r;
 							}
 						}
-						
-//						if (index < 0)
-//							
-//							continue;
-						
-//						System.out.println(index);
-//						for (double dist : distances)
-//							System.out.println(dist);
 						
 						Point curr = points[index];
 						//System.out.println(curr.y() + " " + curr.x());
@@ -393,12 +343,6 @@ public class WebcamTriangleFinder extends Thread {
 				}//end if
 
 				pictureShower.update(gray);
-				
-				//time = System.currentTimeMillis() - time;
-				//if (time < 34) {
-				//	
-				//	Thread.sleep(34 - time);
-				//}//end if
 			}//end while
 		}//end try
 		catch (org.bytedeco.javacv.FrameGrabber.Exception e) {
