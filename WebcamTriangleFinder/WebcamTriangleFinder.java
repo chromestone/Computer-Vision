@@ -236,6 +236,7 @@ public class WebcamTriangleFinder extends Thread {
 							distances[r] = Math.pow(prev.x() - next.x(), 2) + Math.pow(prev.y() - next.y(), 2);
 						}
 						
+						//find shortest side of triangle and point corresponding to it
 						double min = distances[0];
 						int index = 0;
 						for (int r = 1; r < distances.length; r++) {
@@ -285,6 +286,7 @@ public class WebcamTriangleFinder extends Thread {
 							//from here on, Cartesian points are used
 							double slope = (double) (next.x() - prev.x()) / (next.y() - prev.y());
 
+							//coordinates for the interesection of the altitude line to the shortest side of the triangle
 							double x = ((slope / (slope * slope + 1)) * (slope * next.y() - next.x() + curr.y() / slope + curr.x()));
 							int y = (int) (slope * (x - next.y()) + next.x());
 							
@@ -294,6 +296,7 @@ public class WebcamTriangleFinder extends Thread {
 							int xDist = (int) x - curr.y();
 							int yDist = y - curr.x();
 							
+							//if angle is greater than 45 degrees from nearest x axis
 							if (Math.abs(yDist) > Math.abs(xDist)) {
 								
 								if (yDist >= 0) {
